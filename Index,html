@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ocean Portfolio Wireframes</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(180deg, #1e3c72 0%, #2a5298 50%, #004e92 100%);
+            color: #fff;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Ocean Background Animation */
+        .ocean-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            background: linear-gradient(180deg, #1e3c72 0%, #2a5298 30%, #004e92 70%, #001a2e 100%);
+        }
+
+        .ocean-waves {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 200%;
+            height: 100px;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120"><path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" fill="rgba(255,255,255,0.1)"/></svg>') repeat-x;
+            animation: wave 15s cubic-bezier(0.36, 0.45, 0.63, 0.53) infinite;
+            z-index: -1;
+        }
+
+        @keyframes wave {
+            0%, 100% { transform: translateX(0px); }
+            50% { transform: translateX(-50px); }
+        }
+
+        /* Bubble System */
+        .bubble {
+            position: fixed;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.8), rgba(255,255,255,0.3), rgba(255,255,255,0.1));
+            animation: float-up 3s ease-in-out infinite;
+            z-index: 1000;
+            pointer-events: none;
+        }
+
+        @keyframes float-up {
+            0% {
+                opacity: 0.7;
+                transform: translateY(0px) scale(0);
+            }
+            10% {
+                opacity: 1;
+                transform: translateY(-20px) scale(1);
+            }
+            90% {
+                opacity: 1;
+                transform: translateY(-200px) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-250px) scale(0.5);
+            }
+        }
+
+        .wireframe-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255,255,255,0.05);
+            min-height: 100vh;
+            box-shadow: 0 0 50px rgba(0,100,200,0.3);
+            backdrop-filter: blur(10px);
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Navigation */
+        .nav {
+            background: linear-gradient(135deg, rgba(0,30,60,0.9), rgba(0,50,100,0.8));
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            backdrop-filter: blur(15px);
+            border-bottom: 2px solid rgba(100,200,255,0.3);
+        }
+
+        .logo {
+            color: #87CEEB;
+            font-size: 1.8rem;
+            font-weight: bold;
+            text-shadow: 0 0 10px rgba(135,206,235,0.5);
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { text-shadow: 0 0 10px rgba(135,206,235,0.5); }
+            to { text-shadow: 0 0 20px rgba(135,206,235,0.8), 0 0 30px rgba(135,206,235,0.6); }
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-link {
+            color: #B0E0E6;
+            text-decoration: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(176,224,230,0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            background: linear-gradient(135deg, rgba(135,206,235,0.3), rgba(100,200,255,0.2));
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(100,200,255,0.4);
+        }
+
+        /* Page Content */
+        .page {
+            display: none;
+            padding: 2rem;
+            min-height: calc(100vh - 100px);
+            position: relative;
+        }
+
+        .page.active {
+            display: block;
+            animation: fadeIn 0.8s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Ocean-themed Wireframe Elements */
+        .wireframe-box {
+            border: 2px solid rgba(135,206,235,0.6);
+            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(135,206,235,0.05));
+            margin: 1rem 0;
+            padding: 1.5rem;
+            text-align: center;
+            color: #B0E0E6;
+            font-weight: 500;
+            border-radius: 15px;
+            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .wireframe-box:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(100,200,255,0.3);
+            border-color: rgba(135,206,235,0.8);
+        }
+
+        .wireframe-box::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+            transform: rotate(45deg);
+            transition: transform 0.6s;
+            opacity: 0;
+        }
+
+        .wireframe-box:hover::before {
+            animation: shimmer 1.5s ease-in-out;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); opacity: 0; }
+        }
+
+        .hero-section {
+            height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 1.5rem;
+            background: radial-gradient(ellipse at center, rgba(100,200,255,0.2), rgba(0,50,100,0.1));
+        }
+
+        .hero-section h1 {
+            font-size: 3rem;
+            background: linear-gradient(45deg, #87CEEB, #00CED1, #4682B4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 30px rgba(135,206,235,0.5);
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .content-item {
+            height: 280px;
+            background: linear-gradient(135deg, rgba(70,130,180,0.2), rgba(100,200,255,0.1));
+        }
+
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .form-field {
+            height: 60px;
+            margin: 1rem 0;
+            background: rgba(255,255,255,0.05);
+        }
+
+        .text-area {
+            height: 140px;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            margin: 2rem 0 1rem 0;
+            color: #87CEEB;
+            text-align: center;
+            text-shadow: 0 0 20px rgba(135,206,235,0.5);
+        }
+
+        .page-indicator {
+            position: fixed;
+            top: 50%;
+            right: 20px;
+            transform: translateY(-50%);
+            background: rgba(0,30,60,0.9);
+            color: #B0E0E6;
+            padding: 1.5rem;
+            border-radius: 15px;
+            font-size: 0.9rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(135,206,235,0.3);
+            z-index: 1001;
+        }
+
+        /* Floating particles */
+        .particle {
+            position: fixed;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(135,206,235,0.6), rgba(100,200,255,0.2));
+            animation: floatParticle 20s linear infinite;
+            z-index: 0;
+        }
+
+        @keyframes floatParticle {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+            .two-column {
+                grid-template-columns: 1fr;
+            }
+            .nav {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            .hero-section h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="ocean-bg"></div>
+    <div class="ocean-waves"></div>
+
+    <div class="wireframe-container">
+        <!-- Navigation -->
+        <nav class="nav">
+            <div class="logo">🌊 [OCEAN PORTFOLIO]</div>
+            <div class="nav-links">
+                <a href="#" class="nav-link active" data-page="home">🏠 Home</a>
+                <a href="#" class="nav-link" data-page="about">👤 About</a>
+                <a href="#" class="nav-link" data-page="work">💼 Work</a>
+                <a href="#" class="nav-link" data-page="contact">📧 Contact</a>
+            </div>
+        </nav>
+
+        <!-- Home Page -->
+        <div class="page active" id="home">
+            <div class="wireframe-box hero-section">
+                <h1>🌊 [HERO HEADLINE] 🌊</h1>
+                <p>✨ [TAGLINE / SUBTITLE] ✨</p>
+                <div style="padding: 1rem 2rem; background: linear-gradient(45deg, #00CED1, #4682B4); border-radius: 25px; cursor: pointer;" class="bubble-trigger">🚀 [CTA BUTTON]</div>
+            </div>
+            
+            <h2 class="section-title">🐠 Featured Work 🐠</h2>
+            <div class="content-grid">
+                <div class="wireframe-box content-item bubble-trigger">
+                    🖼️ [PROJECT THUMBNAIL]<br><br>
+                    🌊 Ocean Project Alpha
+                </div>
+                <div class="wireframe-box content-item bubble-trigger">
+                    🖼️ [PROJECT THUMBNAIL]<br><br>
+                    🐙 Deep Sea Dashboard
+                </div>
+                <div class="wireframe-box content-item bubble-trigger">
+                    🖼️ [PROJECT THUMBNAIL]<br><br>
+                    🦑 Aquatic App Design
+                </div>
+            </div>
+            
+            <div class="wireframe-box bubble-trigger" style="height: 150px; margin-top: 3rem;">
+                🌊 [BRIEF INTRO / VALUE PROPOSITION] 🌊<br>
+                Diving deep into creative solutions
+            </div>
+        </div>
+
+        <!-- About Page -->
+        <div class="page" id="about">
+            <h1 class="section-title">🧜‍♀️ About Me 🧜‍♂️</h1>
+            
+            <div class="two-column">
+                <div class="wireframe-box bubble-trigger" style="height: 300px;">
+                    📸 [PROFILE PHOTO]<br><br>
+                    Swimming in creativity
+                </div>
+                <div class="wireframe-box bubble-trigger" style="height: 300px;">
+                    📝 [BIO TEXT]<br><br>
+                    Background, experience,<br>
+                    skills, personality<br>
+                    🌊 Ocean enthusiast & designer
+                </div>
+            </div>
+            
+            <h2 class="section-title">🔱 Skills & Expertise 🔱</h2>
+            <div class="content-grid">
+                <div class="wireframe-box bubble-trigger" style="height: 120px;">
+                    🎨 [DESIGN SKILLS]<br>
+                    UI/UX, Visual Design
+                </div>
+                <div class="wireframe-box bubble-trigger" style="height: 120px;">
+                    💻 [TECHNICAL SKILLS]<br>
+                    HTML, CSS, JavaScript
+                </div>
+                <div class="wireframe-box bubble-trigger" style="height: 120px;">
+                    🌊 [CREATIVE SKILLS]<br>
+                    Branding, Animation
+                </div>
+            </div>
+            
+            <div class="wireframe-box bubble-trigger" style="height: 200px; margin-top: 2rem;">
+                ⏰ [TIMELINE / EXPERIENCE]<br><br>
+                🌊 Career highlights and milestones<br>
+                Navigating the depths of design
+            </div>
+        </div>
+
+        <!-- Work Page -->
+        <div class="page" id="work">
+            <h1 class="section-title">🎨 My Work 🎨</h1>
+            
+            <div class="wireframe-box bubble-trigger" style="height: 60px; margin-bottom: 2rem;">
+                🏷️ [FILTER/CATEGORY BUTTONS] - All | Web | Mobile | Branding
+            </div>
+            
+            <div class="content-grid">
+                <div class="wireframe-box content-item bubble-trigger">
+                    🖼️ [PROJECT IMAGE]<br><br>
+                    🌊 Aqua Interface<br>
+                    Modern ocean-themed UI<br>
+                    👁️ [VIEW DETAILS]
+                </div>
+                <div class="wireframe-box content-item bubble-trigger">
+                    🖼️ [PROJECT IMAGE]<br><br>
+                    🐠 Fish Tracker App<br>
+                    Marine life database<br>
+                    👁️ [VIEW DETAILS]
+                </div>
+                <div class="wireframe-box content-item bubble-trigger">
+                    🖼️ [PROJECT IMAGE]<br><br>
+                    🏖️ Beach Resort Site<br>
+                    Luxury coastal experience<br>
+                    👁️ [VIEW DETAILS]
+                </div>
+                <div class="wireframe-box content-item bubble-trigger">
+                    🖼️ [PROJECT IMAGE]<br><br>
+                    🚤 Boat Rental Platform<br>
+                    Maritime booking system<br>
+                    👁️ [VIEW DETAILS]
+                </div>
+                <div class="wireframe-box content-item bubble-trigger">
+                    🖼️ [PROJECT IMAGE]<br><br>
+                    🌊 Wave Animation Studio<br>
+                    CSS animation showcase<br>
+                    👁️ [VIEW DETAILS]
+                </div>
+                <div class="wireframe-box content-item bubble-trigger">
+                    🖼️ [PROJECT IMAGE]<br><br>
+                    🐙 Octopus Analytics<br>
+                    Data visualization tool<br>
+                    👁️ [VIEW DETAILS]
+                </div>
+            </div>
+            
+            <div class="wireframe-box bubble-trigger" style="height: 80px; margin-top: 2rem;">
+                📄 [PAGINATION OR LOAD MORE] - Dive deeper for more projects
+            </div>
+        </div>
+
+        <!-- Contact Page -->
+        <div class="page" id="contact">
+            <h1 class="section-title">📬 Get In Touch 📬</h1>
+            
+            <div class="two-column">
+                <div>
+                    <div class="wireframe-box bubble-trigger" style="height: 100px;">
+                        💭 [CONTACT INTRO TEXT]<br>
+                        🌊 Let's make waves together!
+                    </div>
+                    
+                    <div class="wireframe-box bubble-trigger" style="height: 200px; margin-top: 2rem;">
+                        📞 [CONTACT INFO]<br><br>
+                        📧 wave@oceanportfolio.com<br>
+                        📱 555-OCEAN-1<br>
+                        📍 Coastal City, CA<br>
+                        🔗 Social Currents
+                    </div>
+                </div>
+                
+                <div>
+                    <div class="wireframe-box" style="padding: 0;">
+                        <div style="padding: 1rem; background: linear-gradient(135deg, #1e3c72, #2a5298); color: white; margin: -1.5rem -1.5rem 1rem -1.5rem; border-radius: 15px 15px 0 0;">
+                            🌊 [CONTACT FORM] 🌊
+                        </div>
+                        <div class="wireframe-box form-field bubble-trigger">📝 [NAME FIELD]</div>
+                        <div class="wireframe-box form-field bubble-trigger">📧 [EMAIL FIELD]</div>
+                        <div class="wireframe-box form-field bubble-trigger">💭 [SUBJECT FIELD]</div>
+                        <div class="wireframe-box form-field text-area bubble-trigger">💬 [MESSAGE FIELD]</div>
+                        <div class="wireframe-box form-field bubble-trigger" style="background: linear-gradient(45deg, #00CED1, #4682B4); cursor: pointer;">🚀 [SEND BUTTON]</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="wireframe-box bubble-trigger" style="height: 150px; margin-top: 3rem;">
+                🌊 [CALL-TO-ACTION SECTION] 🌊<br><br>
+                Ready to dive into your next project?
+            </div>
+        </div>
+    </div>
+
+    <div class="page-indicator">
+        🌊 Navigate the depths<br>
+        Click to explore wireframes
+    </div>
+
+    <script>
+        // Navigation functionality
+        const navLinks = document.querySelectorAll('.nav-link');
+        const pages = document.querySelectorAll('.page');
+
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                
+                // Create navigation bubbles
+                createBubbles(e.target, 8);
+                
+                // Remove active class from all nav links and pages
+                navLinks.forEach(nl => nl.classList.remove('active'));
+                pages.forEach(page => page.classList.remove('active'));
+                
+                // Add active class to clicked nav link
+                link.classList.add('active');
+                
+                // Show corresponding page
+                const targetPage = link.getAttribute('data-page');
+                document.getElementById(targetPage).classList.add('active');
+            });
+        });
+
+        // Bubble creation system
+        function createBubbles(element, count = 5) {
+            const rect = element.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+            
+            for (let i = 0; i < count; i++) {
+                const bubble = document.createElement('div');
+                bubble.className = 'bubble';
+                
+                // Random bubble size
+                const size = Math.random() * 20 + 10;
+                bubble.style.width = size + 'px';
+                bubble.style.height = size + 'px';
+                
+                // Position near clicked element
+                bubble.style.left = (centerX + (Math.random() - 0.5) * 100) + 'px';
+                bubble.style.top = centerY + 'px';
+                
+                // Random animation duration
+                bubble.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                bubble.style.animationDelay = (Math.random() * 0.5) + 's';
+                
+                document.body.appendChild(bubble);
+                
+                // Remove bubble after animation
+                setTimeout(() => {
+                    if (bubble.parentNode) {
+                        bubble.parentNode.removeChild(bubble);
+                    }
+                }, 4000);
+            }
+        }
+
+        // Add bubble effects to clickable elements
+        document.querySelectorAll('.bubble-trigger').forEach(element => {
+            element.addEventListener('click', (e) => {
+                createBubbles(e.currentTarget, 6);
+            });
+            
+            element.addEventListener('mouseenter', (e) => {
+                createBubbles(e.currentTarget, 2);
+            });
+        });
+
+        // Floating particles system
+        function createParticle() {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            
+            // Random size and position
+            const size = Math.random() * 8 + 2;
+            particle.style.width = size + 'px';
+            particle.style.height = size + 'px';
+            particle.style.left = Math.random() * window.innerWidth + 'px';
+            
+            // Random animation duration
+            particle.style.animationDuration = (Math.random() * 15 + 15) + 's';
+            
+            document.body.appendChild(particle);
+            
+            // Remove particle after animation
+            setTimeout(() => {
+                if (particle.parentNode) {
+                    particle.parentNode.removeChild(particle);
+                }
+            }, 30000);
+        }
+
+        // Create particles periodically
+        setInterval(createParticle, 3000);
+
+        // Initial particles
+        for (let i = 0; i < 5; i++) {
+            setTimeout(createParticle, i * 1000);
+        }
+
+        // Add some initial bubbles on load
+        setTimeout(() => {
+            createBubbles(document.querySelector('.logo'), 10);
+        }, 1000);
+    </script>
+</body>
+</html>
